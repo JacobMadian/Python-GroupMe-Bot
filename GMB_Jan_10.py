@@ -74,7 +74,7 @@ PC18_names = unadjusted_member_list[70:]
 # Adjustable times for cutoffs, depending on meal type and chef requests
 lunch_cutoff_time = datetime.datetime.now().replace(hour=12, minute=1, second=1)
 dinner_cutoff_time = datetime.datetime.now().replace(hour=17, minute=1, second=0)
-reset_time = datetime.datetime.now().replace(hour=23, minute=47, second=0)
+reset_time = datetime.datetime.now().replace(hour=23, minute=59, second=0)
 
 # Method called to push message to GroupMe chat
 def message_send(to_send):
@@ -188,8 +188,11 @@ while True:
     time.sleep(.5)
     now = datetime.datetime.now()
     if now > reset_time:
-        lunch_list.clear()
-        dinner_list.clear()
+        # This command is not available before version 3.3
+        #lunch_list.clear()
+        #dinner_list.clear()
+        del lunch_list[:]
+        del dinner_list[:]
         clear()
     try:
         response = requests.get(chat_link, params={'token': bot_token})
