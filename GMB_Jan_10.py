@@ -8,6 +8,8 @@ import datetime
 import os
 import requests
 from texttable import Texttable
+from fabulous import text
+
 
 # Commands used to activate bot
 bot_call = '!bot'
@@ -44,6 +46,8 @@ clear = lambda: os.system('reset')
 #clear = lambda: os.system('cls')
 clear()
 
+
+
 # Lists hold names of those who want leftovers. Set to be wiped after the reset time: reset_time.
 lunch_list = []
 dinner_list = []
@@ -60,6 +64,11 @@ lunch_output_table.add_row([['         Lunch         ']])
 lunch_output_table.set_cols_align("c")
 dinner_output_table.set_cols_align("c")
 
+# Print Banner
+print(text.Text("LATE PLATE BOT", color='0000ff', shadow=True, skew=5))
+print(lunch_output_table.draw())
+print(dinner_output_table.draw())
+
 # Used to make sure fake names are not put onto the lists.
 unadjusted_member_list = open(member_path, "r").read().splitlines()
 member_list = [entry.replace(" ", "").lower() for entry in unadjusted_member_list[1:]]
@@ -74,7 +83,8 @@ PC18_names = unadjusted_member_list[70:]
 # Adjustable times for cutoffs, depending on meal type and chef requests
 lunch_cutoff_time = datetime.datetime.now().replace(hour=12, minute=1, second=1)
 dinner_cutoff_time = datetime.datetime.now().replace(hour=17, minute=1, second=0)
-reset_time = datetime.datetime.now().replace(hour=23, minute=59, second=0)
+reset_time = datetime.datetime.now().replace(hour=23, minute=58, second=0)
+reset_time_end = datetime.datetime.now().replace(hour=23, minute=58,second=10)
 
 # Method called to push message to GroupMe chat
 def message_send(to_send):
@@ -139,6 +149,7 @@ def string_parser(user_input):
                 lunch_list.append(member_name)
                 lunch_output_table.add_row([[str(member_name)]])
                 clear()
+                print(text.Text("LATE PLATE BOT", color='0000ff', shadow=True, skew=5))
                 print(lunch_output_table.draw())
                 print(dinner_output_table.draw())
                 message_send('Gotcha ' + member_name + ' you are on the lunch list!')
@@ -156,6 +167,7 @@ def string_parser(user_input):
                 dinner_list.append(member_name)
                 dinner_output_table.add_row([[str(member_name)]])
                 clear()
+                print(text.Text("LATE PLATE BOT", color='0000ff', shadow=True, skew=5))
                 print(lunch_output_table.draw())
                 print(dinner_output_table.draw())
                 message_send('Gotcha ' + member_name + ' you are on the dinner list!')
@@ -188,12 +200,24 @@ while True:
     time.sleep(.5)
     now = datetime.datetime.now()
     if now > reset_time:
-        # This command is not available before version 3.3
-        #lunch_list.clear()
-        #dinner_list.clear()
-        del lunch_list[:]
-        del dinner_list[:]
-        clear()
+        if now < reset_time_end:
+            # This command is not available before version 3.3
+            #lunch_list.clear()
+            #dinner_list.clear()
+            del lunch_list[:]
+            del dinner_list[:]
+            lunch_output_table.reset()
+            dinner_output_table.reset()
+            clear()
+            dinner_output_table.add_row([['        Dinner         ']])
+            lunch_output_table.add_row([['         Lunch         ']])
+            lunch_output_table.set_cols_align("c")
+            dinner_output_table.set_cols_align("c")
+            print(text.Text("LATE PLATE BOT", color='0000ff', shadow=True, skew=5))
+            print(lunch_output_table.draw())
+            print(dinner_output_table.draw())
+        else:
+            pass
     try:
         response = requests.get(chat_link, params={'token': bot_token})
         response_messages = response.json()['response']['messages']

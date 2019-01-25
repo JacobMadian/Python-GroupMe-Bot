@@ -72,9 +72,15 @@ PC17_names = unadjusted_member_list[47:69]
 PC18_names = unadjusted_member_list[70:]
 
 # Adjustable times for cutoffs, depending on meal type and chef requests
+<<<<<<< HEAD
 lunch_cutoff_time = datetime.datetime.now().replace(hour=12, minute=1, second=1)
 dinner_cutoff_time = datetime.datetime.now().replace(hour=17, minute=1, second=0)
 reset_time = datetime.datetime.now().replace(hour=23, minute=47, second=0)
+=======
+lunch_cutoff_time = datetime.datetime.now().replace(hour=23, minute=59, second=30)
+dinner_cutoff_time = datetime.datetime.now().replace(hour=23, minute=59, second=0)
+reset_time = datetime.datetime.now().replace(hour=23, minute=59, second=0)
+>>>>>>> 31788eaf53e8209115c1dc7478d8d23cad01bc56
 
 # Method called to push message to GroupMe chat
 def message_send(to_send):
